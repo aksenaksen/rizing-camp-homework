@@ -38,9 +38,8 @@ public class HotelService {
 
     @Transactional(readOnly = true)
     public ResponseHotelDetail findHotelDetail(Long hotelId, LocalDate date) {
-        Hotel hotel = hotelRepository.findHotelWithRoomTypes(hotelId)
-                .orElseThrow(() -> new RuntimeException("해당하는 호텔이 존재하지 않습니다."));
-        
+
+        Hotel hotel = getHotel(hotelId);
         List<ResponseRoomTypeDetail> roomTypeDetails = hotel.getRoomTypes().stream()
                 .map(roomType -> {
                     boolean isAvailable = roomService.isRoomTypeAvailable(hotelId, roomType.getId(), date);
@@ -51,10 +50,19 @@ public class HotelService {
         return ResponseHotelDetail.of(hotel, roomTypeDetails);
     }
 
+    private Hotel getHotel(Long hotelId) {
+        Hotel hotel = null;
+        int month = LocalDate.now().getMonthValue();
 
-
-
-
+        if (month == 12 || month == 1 || month == 2) {
+            hotel = hotelRepository.findHotelWithRoomTypesWithOffPrice(hotelId)
+                    .orElseThrow(() -> new RuntimeException("해당하는 호텔이 존재하지 않습니다."));
+        } else {
+            hotel = hotelRepository.findHotelWithRoomTypesWithOnPrice(hotelId)
+                    .orElseThrow(() -> new RuntimeException("해당하는 호텔이 존재하지 않습니다."));
+        }
+        return hotel;
+    }
 
 
 }

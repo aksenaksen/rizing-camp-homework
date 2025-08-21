@@ -17,7 +17,16 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     WHERE h.id = :hotelId
     ORDER BY rt.onPrice ASC
 """)
-    Optional<Hotel> findHotelWithRoomTypes(@Param("hotelId") Long hotelId);
+    Optional<Hotel> findHotelWithRoomTypesWithOnPrice(@Param("hotelId") Long hotelId);
+
+    @Query("""
+    SELECT DISTINCT h
+    FROM Hotel h
+    LEFT JOIN FETCH h.roomTypes rt
+    WHERE h.id = :hotelId
+    ORDER BY rt.offPrice ASC
+""")
+    Optional<Hotel> findHotelWithRoomTypesWithOffPrice(@Param("hotelId") Long hotelId);
 
     @Query("""
     SELECT DISTINCT h
