@@ -33,12 +33,10 @@ public class Room {
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Vacancy> vacancies = new ArrayList<>();
 
-    public boolean isAvailable(LocalDate date){
+    public boolean isAvailable(LocalDate date) {
         return vacancies.stream().anyMatch(vacancy ->
-                vacancy.getDate().equals(date)
-                && vacancy.isAvailable());
+                vacancy.getDate().equals(date) && vacancy.isAvailable());
     }
-
     // 연관관계 편의 메서드
     public void addVacancy(Vacancy vacancy) {
         this.vacancies.add(vacancy);

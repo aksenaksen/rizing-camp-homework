@@ -2,8 +2,8 @@ package com.example.demo.booking.presentation.dto;
 
 import com.example.demo.booking.domain.Booking;
 import com.example.demo.booking.domain.BookingStatus;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
+@EqualsAndHashCode
 public class BookingResponseDto {
     private Long id;
     private Long userId;
@@ -24,7 +25,6 @@ public class BookingResponseDto {
     private String requirement;
     private LocalDateTime eta;
     private Boolean isWalkIn;
-    @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
     public static BookingResponseDto from(Booking entity) {

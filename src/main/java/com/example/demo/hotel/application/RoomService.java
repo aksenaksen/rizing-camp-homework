@@ -7,14 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RoomService {
-    
+
     private final RoomRepository roomRepository;
     
     public boolean isRoomAvailable(Long roomId, LocalDate date) {
@@ -27,6 +26,11 @@ public class RoomService {
         List<Room> rooms = findRoomsWithVacanciesForAvailability(hotelId, roomTypeId);
         return rooms.stream()
                 .anyMatch(room -> room.isAvailable(date));
+    }
+
+    public Long getRoomTypeId(Long roomId) {
+        Room room = roomRepository.findById(roomId).orElseThrow(() -> new RuntimeException("Room Not Available"));
+        return room.getRoomTypeId();
     }
 
     private List<Room> findRoomsWithVacanciesForAvailability(Long hotelId, Long roomTypeId) {

@@ -27,6 +27,7 @@ public class Hotel {
 
     private String address;
 
+    @Column(name = "ranks")
     private Integer rank;
 
     private float rating;
@@ -43,6 +44,10 @@ public class Hotel {
     public void removeRoomType(RoomType roomType) {
         this.roomTypes.remove(roomType);
         roomType.setHotel(null);
+    }
+
+    public RoomType findRoomType(Long roomTypeId) {
+        return this.roomTypes.stream().filter(r -> r.getId().equals(roomTypeId)).findFirst().orElse(null);
     }
 
 

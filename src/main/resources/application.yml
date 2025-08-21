@@ -3,19 +3,16 @@ spring:
     name: demo
   
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: password
-    
-  h2:
-    console:
-      enabled: true
+    url: jdbc:mysql://localhost:3306/hotel
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
       
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 #    show-sql: true
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect

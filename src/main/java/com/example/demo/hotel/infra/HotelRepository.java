@@ -35,4 +35,7 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     ORDER BY rt.onPrice ASC
 """)
     List<Hotel> findAllWithRoomTypes();
+
+    @Query("SELECT rt.hotel FROM RoomType rt WHERE rt.id = :roomTypeId")
+    Optional<Hotel> findHotelByRoomTypeId(@Param("roomTypeId") Long roomTypeId);
 }

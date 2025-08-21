@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,7 +20,6 @@ public class HotelService {
 
     private final HotelRepository hotelRepository;
     private final RoomService roomService;
-
 
     @Transactional(readOnly = true)
     public List<ResponseHotelRoomType> findAllHotelRoomType(LocalDate date) {
@@ -48,6 +48,17 @@ public class HotelService {
                 .toList();
 
         return ResponseHotelDetail.of(hotel, roomTypeDetails);
+    }
+
+    @Transactional(readOnly = true)
+    public BigDecimal getPrice(Long roomTypeId, LocalDate startDate, LocalDate endDate) {
+        BigDecimal price = BigDecimal.ZERO;
+        Hotel hotel = hotelRepository.findHotelByRoomTypeId(roomTypeId)
+                .orElseThrow(() -> new RuntimeException("해당하는 방 타입을 찾을 수 없습니다."));
+        for (LocalDate date = startDate; date.isBefore(endDate); date = date.plusDays(1)) {
+            price = price.add(hotel.getRoomTypes().getFirst().getPrice(date));
+        }
+        return price;
     }
 
     private Hotel getHotel(Long hotelId) {

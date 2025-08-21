@@ -5,10 +5,13 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -58,5 +61,18 @@ public class Booking {
                 roomId,
                 status
         );
+    }
+
+    public void checkDate(){
+        LocalDate now = LocalDate.now();
+        if(inDate.isBefore(now) || inDate.isEqual(now)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "당일과 과거의 예약은 취소할 수 없습니다.");
+        }
+    }
+
+    public void checkUser(Long userId){
+        if (!Objects.equals(userId, this.userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "예약 정보 내 사용자와 일치하지 않습니다.");
+        }
     }
 }

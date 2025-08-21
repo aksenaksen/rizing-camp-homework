@@ -12,6 +12,7 @@ public record ResponseHotelDetail(
         float rating,
         List<ResponseRoomTypeDetail> roomTypes
 ) {
+
     public static ResponseHotelDetail of(Hotel hotel, List<ResponseRoomTypeDetail> roomTypes) {
         return new ResponseHotelDetail(
                 hotel.getId(),

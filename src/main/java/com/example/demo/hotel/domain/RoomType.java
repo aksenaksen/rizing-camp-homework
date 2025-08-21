@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -36,4 +37,11 @@ public class RoomType {
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
+    public BigDecimal getPrice(LocalDate date) {
+        int month = date.getMonthValue();
+        if (month == 12 || month == 1 || month == 2) {
+            return offPrice;
+        }
+        return onPrice;
+    }
 }
